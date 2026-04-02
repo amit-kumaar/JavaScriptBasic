@@ -12,7 +12,7 @@
  */
 
 // fix the for loop
-for (x = 5; x < 10; x++) { //x=g5 was missing
+for (x = 5; x < 10; x++) { //x=5 was missing
   console.log(x);
 }
 
