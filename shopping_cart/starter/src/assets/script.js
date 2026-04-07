@@ -22,19 +22,24 @@ const products = [
 
 /* Declare an empty array named cart to hold the items in the cart */
 const cart = [];
+let totalPaid = 0;
+
+function getProduct(productId) {
+  return products.find(p => p.productId === productId);
+}
 
 /* Create a function named addProductToCart that takes in the product productId as an argument
   - addProductToCart should get the correct product based on the productId
   - addProductToCart should then increase the product's quantity
   - if the product is not already in the cart, add it to the cart
 */
-function addProductToCart(productId){
-    const product = products.find(p=>p.productId===productId);
-    product.quantity++;
-    const inCart = cart.find(p=>p.productId===productId);
-    if(!inCart){
-      cart.push(product)
-    }
+function addProductToCart(productId) {
+  const product = getProduct(productId);
+  product.quantity++;
+  const inCart = cart.find(p => p.productId === productId);
+  if (!inCart) {
+    cart.push(product);
+  }
 }
 
 /* Create a function named increaseQuantity that takes in the productId as an argument
@@ -42,8 +47,8 @@ function addProductToCart(productId){
   - increaseQuantity should then increase the product's quantity
 */
 
-function increaseQuantity(productId){
-  const product=products.find(p=>p.productId===productId);
+function increaseQuantity(productId) {
+  const product = getProduct(productId);
   product.quantity++;
 }
 /* Create a function named decreaseQuantity that takes in the productId as an argument
@@ -51,14 +56,12 @@ function increaseQuantity(productId){
   - decreaseQuantity should decrease the quantity of the product
   - if the function decreases the quantity to 0, the product is removed from the cart
 */
-function decreaseQuantity(productId){
-  const product=products.find(p=>p.productId===productId)
+function decreaseQuantity(productId) {
+  const product = getProduct(productId);
   product.quantity--;
-  if(product.quantity===0){
-    const index = cart.findIndex(
-      p=>p.productId===productId
-    );
-    cart.splice(index,1)
+  if (product.quantity === 0) {
+    const index = cart.findIndex(p => p.productId === productId);
+    cart.splice(index, 1);
   }
 }
 
@@ -67,15 +70,11 @@ function decreaseQuantity(productId){
   - removeProductFromCart should update the product quantity to 0
   - removeProductFromCart should remove the product from the cart
 */
-function removeProductFromCart(productId){
-  const product = products.find(
-    p=>p.productId===productId
-  )
-  product.quantity=0;
-  const index = cart.findIndex(
-    p=>p.productId===productId
-  );
-  cart.splice(index,1)
+function removeProductFromCart(productId) {
+  const product = getProduct(productId);
+  product.quantity = 0;
+  const index = cart.findIndex(p => p.productId === productId);
+  cart.splice(index, 1);
 }
 
 /* Create a function named cartTotal that has no parameters
@@ -83,18 +82,17 @@ function removeProductFromCart(productId){
   - cartTotal should return the total cost of the products in the cart
   Hint: price and quantity can be used to determine total cost
 */
-function cartTotal(){
+function cartTotal() {
   let total = 0;
-    cart.forEach(
-      item => total += item.price * item.quantity
-    )
+  cart.forEach(item => total += item.price * item.quantity);
   return total;
 }
 
 /* Create a function called emptyCart that empties the products from the cart */
-function emptyCart(){
-  cart.forEach(item => item.quantity=0);
-  cart.length=0;
+function emptyCart() {
+  cart.forEach(item => item.quantity = 0);
+  cart.length = 0;
+  totalPaid = 0;
 }
 
 /* Create a function named pay that takes in an amount as an argument
@@ -104,12 +102,17 @@ function emptyCart(){
   Hint: cartTotal function gives us cost of all the products in the cart  
 */
 
-function pay(amount){
-  return amount -cartTotal();
+function pay(amount) {
+  totalPaid += amount;
+  const balance = totalPaid - cartTotal();
+  if (balance >= 0) {
+    emptyCart();
+  }
+  return balance;
 }
 /* Place stand out suggestions here (stand out suggestions can be found at the bottom of the project rubric.)*/
 function currency(amount, exchangeRate) {
-   return amount * exchangeRate;
+  return amount * exchangeRate;
 }
 
 /* The following is for running unit tests. 
